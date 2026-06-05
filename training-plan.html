@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Training Plan">
+<title>16-Week Training Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1a1612;
+    --card: #211d18;
+    --card2: #261f19;
+    --border: #2e2720;
+    --muted: #7a6f62;
+    --text: #ede5d8;
+    --accent: #e8c547;
+    --p1: #e8c547;
+    --p2: #e87c47;
+    --p3: #e84747;
+    --green: #4ca868;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #1a1612; color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overscroll-behavior: none; }
+  body { padding-bottom: 80px; }
+
+  /* HEADER */
+  .header { padding: 48px 20px 16px; border-bottom: 1px solid var(--border); background: #1a1612; }
+  .header-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.22em; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; }
+  .header-title { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; }
+  .header-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.08em; color: var(--accent); margin-top: 4px; }
+
+  /* BOTTOM NAV */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e1a14; border-top: 1px solid var(--border); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
+  .nav-btn { flex: 1; padding: 12px 4px 10px; background: none; border: none; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.2s; }
+  .nav-btn.active { color: var(--accent); }
+  .nav-btn svg { width: 20px; height: 20px; }
+
+  /* TABS CONTENT */
+  .tab { display: none; padding: 0 16px; }
+  .tab.active { display: block; }
+
+  /* PHASE PILLS */
+  .phase-row { display: flex; gap: 8px; padding: 16px 0 12px; overflow-x: auto; scrollbar-width: none; }
+  .phase-row::-webkit-scrollbar { display: none; }
+  .phase-pill { flex-shrink: 0; padding: 10px 16px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-align: left; }
+  .phase-pill span { display: block; font-size: 9px; font-weight: 400; margin-top: 2px; opacity: 0.6; }
+  .phase-pill.active { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 15%, transparent); color: var(--pc); }
+
+  /* PHASE INFO */
+  .phase-info { background: var(--card); border-left: 3px solid var(--pc); border-radius: 0 6px 6px 0; padding: 14px 16px; margin-bottom: 16px; }
+  .phase-info-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pc); margin-bottom: 6px; }
+  .phase-info p { font-size: 13px; color: var(--text); line-height: 1.6; opacity: 0.82; margin-bottom: 10px; }
+  .target-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .target-pill { background: color-mix(in srgb, var(--pc) 15%, transparent); border: 1px solid color-mix(in srgb, var(--pc) 40%, transparent); color: var(--pc); padding: 3px 10px; border-radius: 4px; font-size: 10px; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.04em; }
+
+  /* DAY SELECTOR */
+  .day-row { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; scrollbar-width: none; }
+  .day-row::-webkit-scrollbar { display: none; }
+  .day-btn { flex-shrink: 0; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-align: center; min-width: 80px; }
+  .day-btn span { display: block; font-size: 9px; font-weight: 400; margin-top: 2px; opacity: 0.6; }
+  .day-btn.active { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 15%, transparent); color: var(--pc); }
+
+  /* SECTION TOGGLE */
+  .section-toggle { display: flex; gap: 6px; margin-bottom: 16px; }
+  .sec-btn { padding: 7px 12px; border-radius: 4px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; flex: 1; text-align: center; }
+  .sec-btn.active { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 15%, transparent); color: var(--pc); }
+
+  /* EXERCISE CARD */
+  .ex-block-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pc); margin-bottom: 10px; }
+  .ex-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 8px; }
+  .ex-name { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text); margin-bottom: 8px; }
+  .ex-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .ex-tag { background: color-mix(in srgb, var(--pc) 12%, transparent); border: 1px solid color-mix(in srgb, var(--pc) 30%, transparent); border-radius: 4px; padding: 3px 10px; text-align: center; }
+  .ex-tag-label { font-family: 'Barlow Condensed', sans-serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pc); opacity: 0.7; }
+  .ex-tag-val { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; color: var(--pc); }
+  .ex-tag.rest { background: color-mix(in srgb, #555 12%, transparent); border-color: color-mix(in srgb, #555 30%, transparent); }
+  .ex-tag.rest .ex-tag-label, .ex-tag.rest .ex-tag-val { color: #8a7a6a; }
+  .ex-load { font-size: 11px; color: var(--pc); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .ex-notes { font-size: 12px; color: #7a6a58; line-height: 1.55; }
+
+  /* WEEKLY SCHEDULE */
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 12px 0 8px; }
+  .week-cell { text-align: center; padding: 8px 2px; border-radius: 4px; }
+  .week-cell.on { background: color-mix(in srgb, var(--pc) 15%, transparent); border: 1px solid color-mix(in srgb, var(--pc) 40%, transparent); }
+  .week-cell.off { background: #141008; border: 1px solid var(--border); }
+  .week-day { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; }
+  .week-cell.on .week-day { color: var(--pc); }
+  .week-cell.off .week-day { color: var(--muted); }
+  .week-label { font-size: 8px; line-height: 1.2; margin-top: 2px; }
+  .week-cell.on .week-label { color: var(--text); opacity: 0.7; }
+  .week-cell.off .week-label { color: var(--muted); opacity: 0.4; }
+
+  /* INFO CARD */
+  .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 10px; }
+  .info-card-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .info-card-val { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .info-card-detail { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* SAFETY */
+  .safety-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 14px 16px; margin-bottom: 8px; display: flex; gap: 12px; align-items: flex-start; }
+  .safety-num { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent); line-height: 1; min-width: 24px; }
+  .safety-text { font-size: 13px; color: var(--text); line-height: 1.6; opacity: 0.85; }
+
+  /* MOBILITY */
+  .mob-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+  .mob-name { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .mob-notes { font-size: 12px; color: #7a6a58; line-height: 1.5; }
+  .mob-dur { text-align: right; flex-shrink: 0; }
+  .mob-dur-val { color: var(--accent); font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; }
+  .mob-reps { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* NUTRITION MEAL */
+  .meal-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-name { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); letter-spacing: 0.04em; min-width: 90px; padding-top: 1px; }
+  .meal-content { flex: 1; font-size: 12px; color: var(--text); opacity: 0.8; line-height: 1.5; }
+  .meal-kcal { font-size: 10px; color: var(--muted); white-space: nowrap; padding-top: 2px; }
+
+  /* GREEN BOX */
+  .green-box { background: #0f1a10; border: 1px solid #1a3a22; border-radius: 6px; padding: 14px 16px; margin-top: 16px; }
+  .green-box-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.14em; color: var(--green); text-transform: uppercase; margin-bottom: 6px; }
+  .green-box p { font-size: 13px; color: #a0c8a8; line-height: 1.6; }
+
+  /* SECTION HEADING */
+  .sec-heading { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; margin: 20px 0 6px; }
+  .sec-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+
+  .deload-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .deload-note span { color: var(--pc); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">16-Week Programme</div>
+  <div class="header-title">Mass &amp; Strength</div>
+  <div class="header-sub">Posterior Chain · Trunk · Mobility</div>
+</div>
+
+<!-- TABS -->
+<div id="tab-plan" class="tab active"></div>
+<div id="tab-mobility" class="tab"></div>
+<div id="tab-nutrition" class="tab"></div>
+<div id="tab-calendar" class="tab"></div>
+<div id="tab-safety" class="tab"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="switchTab('plan',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    Plan
+  </button>
+  <button class="nav-btn" onclick="switchTab('mobility',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    Mobility
+  </button>
+  <button class="nav-btn" onclick="switchTab('nutrition',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+    Nutrition
+  </button>
+  <button class="nav-btn" onclick="switchTab('calendar',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Calendar
+  </button>
+  <button class="nav-btn" onclick="switchTab('safety',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Safety
+  </button>
+</nav>
+
+<script>
+const PHASE_COLORS = ['#e8c547','#e87c47','#e84747'];
+
+const data = {
+  phases: [
+    {
+      name:'Phase 1', subtitle:'Foundation & Movement', weeks:'Weeks 1–4',
+      desc:'Build movement patterns, activate posterior chain, establish mobility baseline. No ego lifting — perfect the hinge, squat, and brace.',
+      targets:['Hip hinge with flat back','Goblet squat to parallel','Rack pull 1.0× bodyweight','Hip thrust 1.25× bodyweight'],
+      days:[
+        {
+          id:'A', label:'Lower A', tag:'Quads + Glutes',
+          warmup:{ dur:'15 min', exs:[
+            {n:'Deep Squat Hold (assisted)',r:'3 × 60 sec',notes:'Hold doorframe or TRX. Chest up, knees out.'},
+            {n:'90/90 Hip Switch',r:'2 × 10 switches',notes:'Slow and controlled, feel each hip position.'},
+            {n:'Ankle Wall Stretch',r:'2 × 45 sec each side',notes:'Knee drives over 4th toe. Critical for squat depth.'},
+            {n:'Glute Bridge',r:'2 × 15 reps',notes:'Squeeze hard at top. Activate glutes before loading.'},
+          ]},
+          workout:[
+            {n:'Goblet Squat',s:'4',r:'8–10',rest:'90s',load:'Moderate — form first',notes:'Elbows inside knees. Sit INTO the squat. Full depth if possible.'},
+            {n:'Romanian Deadlift (RDL)',s:'4',r:'8–10',rest:'2 min',load:'Moderate',notes:'Push hips back, slight knee bend. Feel hamstring stretch. Bar stays close.'},
+            {n:'Leg Press',s:'3',r:'12–15',rest:'90s',load:'Challenging but controlled',notes:'High foot placement = more glutes/hams. Don\'t lock knees.'},
+            {n:'Hip Thrust',s:'4',r:'10–12',rest:'90s',load:'Heavy — this can go up fast',notes:'Drive through heels. Full hip extension. Squeeze 1 sec at top.'},
+            {n:'Walking Lunge',s:'3',r:'10 each leg',rest:'60s',load:'Bodyweight or light DBs',notes:'Back knee nearly touches floor. Torso upright.'},
+          ],
+          cooldown:{ dur:'10 min', exs:[
+            {n:'Hip Flexor Lunge Stretch',r:'2 × 90 sec each side',notes:'Tuck pelvis under. Feel front of hip open.'},
+            {n:'Seated Hamstring Stretch',r:'2 × 90 sec each side',notes:'Don\'t round the back — hinge at hip.'},
+            {n:'Pigeon Pose / Figure-4',r:'2 × 90 sec each side',notes:'External hip rotation. Breathe deeply into the stretch.'},
+          ]}
+        },
+        {
+          id:'B', label:'Upper', tag:'Back + Shoulders + Arms',
+          warmup:{ dur:'10 min', exs:[
+            {n:'Cat-Cow',r:'2 × 10 slow reps',notes:'Move each vertebra intentionally.'},
+            {n:'Wall Angels',r:'3 × 10 reps',notes:'Full contact: head, upper back, sacrum. Slow.'},
+            {n:'Band Pull-Apart',r:'3 × 15 reps',notes:'Squeeze shoulder blades together. Elbows soft.'},
+            {n:'Arm Circles + Shoulder CARs',r:'2 × 10 each direction',notes:'Full range rotations. Controlled.'},
+          ]},
+          workout:[
+            {n:'Bent-Over Barbell Row',s:'4',r:'6–8',rest:'2 min',load:'Heavy — aim to progress weekly',notes:'Hinge at 45°. Pull to lower chest. Squeeze lats. No bouncing.'},
+            {n:'Lat Pulldown',s:'3',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:'Full stretch at top. Pull to collarbone. Don\'t lean back excessively.'},
+            {n:'Seated Cable Row',s:'3',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:'Tall spine. Drive elbows back. Hold 1 sec at contraction.'},
+            {n:'Overhead Press (DB or BB)',s:'4',r:'8–10',rest:'90s',load:'Moderate',notes:'Brace core. Don\'t flare ribs. Full lockout.'},
+            {n:'Face Pull',s:'3',r:'15–20',rest:'60s',load:'Light-moderate',notes:'Rope to forehead level. External rotation. Crucial for shoulder health.'},
+            {n:'Barbell/EZ Curl',s:'3',r:'10–12',rest:'60s',load:'Moderate',notes:'No swinging. Full range.'},
+          ],
+          cooldown:{ dur:'8 min', exs:[
+            {n:'Thoracic Foam Roll',r:'1 × 3 min',notes:'Slow. Pause on tight spots. Arms crossed on chest.'},
+            {n:'Doorway Chest Stretch',r:'2 × 60 sec',notes:'Feel the pec and front shoulder stretch.'},
+            {n:'Child\'s Pose (lat stretch)',r:'2 × 60 sec',notes:'Walk hands to each side to bias each lat.'},
+          ]}
+        },
+        {
+          id:'C', label:'Lower B', tag:'Posterior Chain Heavy',
+          warmup:{ dur:'15 min', exs:[
+            {n:'Hip Circle (standing)',r:'2 × 10 each direction',notes:'Large circles. Loosen the hip capsule.'},
+            {n:'Leg Swing (front/back + lateral)',r:'2 × 15 each',notes:'Dynamic. Hold wall. Increasing range each rep.'},
+            {n:'Good Morning (bodyweight)',r:'3 × 10 reps',notes:'Hinge from hip. Soft knee. Flat back. Rehearsal for deadlift.'},
+            {n:'Band Clamshell',r:'2 × 15 each side',notes:'Activate glute med. Crucial for hip stability under load.'},
+          ]},
+          workout:[
+            {n:'Rack Pull (from knee height)',s:'5',r:'4–6',rest:'2–3 min',load:'HEAVY — main strength driver Phase 1',notes:'Brace like you\'re about to get punched. Push floor away. Bar drags up shins.'},
+            {n:'Bulgarian Split Squat',s:'4',r:'8 each leg',rest:'2 min',load:'Moderate — humbling but essential',notes:'Rear foot on bench. Vertical shin. 3 sec descent.'},
+            {n:'Leg Curl (machine)',s:'4',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:'Control the eccentric. Hamstrings must do the work, not momentum.'},
+            {n:'Cable Pull-Through',s:'3',r:'15',rest:'60s',load:'Moderate',notes:'Hinge pattern. Glutes and hams. Great for learning hip drive.'},
+            {n:'Calf Raise (seated or standing)',s:'4',r:'15–20',rest:'60s',load:'Moderate',notes:'Full range — deep stretch at bottom. Hold 1 sec at top.'},
+          ],
+          cooldown:{ dur:'12 min', exs:[
+            {n:'90/90 Hip Stretch (passive hold)',r:'2 × 2 min each side',notes:'Settle into it. Don\'t force. Let gravity do the work.'},
+            {n:'Jefferson Curl (bodyweight or light plate)',r:'2 × 5 slow reps',notes:'Vertebra by vertebra. Slow down, slow up. Decompresses spine + lengthens hamstrings.'},
+            {n:'Supine Glute Stretch (figure-4)',r:'2 × 90 sec each side',notes:'Breathe. Let the hip externally rotate.'},
+          ]}
+        },
+        {
+          id:'D', label:'Upper B', tag:'Chest + Triceps + Core',
+          warmup:{ dur:'10 min', exs:[
+            {n:'Thoracic Rotation (seated)',r:'2 × 10 each side',notes:'Hand behind head. Rotate from mid-back, not lower.'},
+            {n:'Push-Up (slow)',r:'3 × 8 slow reps',notes:'3 sec down, 1 sec hold, push up.'},
+            {n:'Band Pull-Apart',r:'3 × 15',notes:'Shoulder health ritual.'},
+          ]},
+          workout:[
+            {n:'Incline Barbell/DB Press',s:'4',r:'8–10',rest:'90s',load:'Moderate-heavy',notes:'45° incline. Touch chest. Press strong. Controlled descent.'},
+            {n:'Flat Dumbbell Press',s:'3',r:'10–12',rest:'90s',load:'Moderate',notes:'Elbows at 60°, not flared. Deep stretch at bottom.'},
+            {n:'Dips (bodyweight or weighted)',s:'3',r:'8–10',rest:'90s',load:'Bodyweight first',notes:'Slight forward lean = more chest. Upright = more tricep.'},
+            {n:'Tricep Pushdown (cable)',s:'3',r:'12–15',rest:'60s',load:'Moderate',notes:'Elbows fixed at sides. Full extension.'},
+            {n:'Ab Wheel / Plank',s:'3',r:'8 rollouts / 45 sec',rest:'60s',load:'Bodyweight',notes:'Core bracing under extension — exactly what you need for heavy lifts.'},
+            {n:'Pallof Press',s:'3',r:'12 each side',rest:'60s',load:'Light-moderate',notes:'Anti-rotation core stability. Fundamental for heavy lifting safely.'},
+          ],
+          cooldown:{ dur:'8 min', exs:[
+            {n:'Foam Roll Thoracic Spine',r:'1 × 2–3 min',notes:'Extension over roller. Breathe out as you extend.'},
+            {n:'Pec / Shoulder Stretch',r:'2 × 60 sec each side',notes:'Arm at 90° against wall. Gentle rotation away.'},
+          ]}
+        }
+      ]
+    },
+    {
+      name:'Phase 2', subtitle:'Load & Build', weeks:'Weeks 5–10',
+      desc:'Transition to conventional deadlifts and back squats. Increase loads systematically. 5×5 on main lifts. Mobility shifts to maintenance.',
+      targets:['Conventional deadlift 1.5× BW','Back squat 1.25× BW','Hip thrust 1.75× BW','Bent-over row 1.0× BW'],
+      days:[
+        {
+          id:'A', label:'Lower A', tag:'Squat Focus',
+          warmup:{ dur:'15 min', exs:[
+            {n:'Deep Squat Hold',r:'3 × 90 sec',notes:'Should be deeper than Phase 1 by now.'},
+            {n:'Ankle Mobility Drill',r:'3 × 60 sec each',notes:'Knee to wall — 5cm target.'},
+            {n:'Hip CARs',r:'2 × 5 each side',notes:'Slow full-range hip circles. Own every degree.'},
+            {n:'Box Squat (bodyweight)',r:'3 × 10',notes:'Sit back to box, pause, drive up. Rehearsal for squat.'},
+          ]},
+          workout:[
+            {n:'Back Squat',s:'5',r:'5',rest:'3 min',load:'HEAVY — 5×5 is your strength driver',notes:'Belt when above ~80% 1RM. Brace hard. Sit into it. Drive knees out.'},
+            {n:'Front Squat or Hack Squat',s:'3',r:'8–10',rest:'2 min',load:'Moderate',notes:'More quad focus. Upright torso.'},
+            {n:'Hip Thrust',s:'4',r:'8–10',rest:'90s',load:'Heavy and increasing',notes:'Progress every session if possible.'},
+            {n:'Leg Press',s:'3',r:'10–15',rest:'90s',load:'Heavy',notes:'Volume accumulation. Push the quad work.'},
+            {n:'Calf Raise',s:'4',r:'15–20',rest:'60s',load:'Moderate-heavy',notes:'Slow and controlled. Full stretch.'},
+          ],
+          cooldown:{ dur:'12 min', exs:[
+            {n:'Hip Flexor Lunge Stretch',r:'2 × 2 min each',notes:'Deeper than Phase 1. Add a slight lateral lean.'},
+            {n:'Pigeon Pose',r:'2 × 2 min each',notes:'Fully passive. Focus on the hip capsule.'},
+            {n:'Seated Hamstring Stretch',r:'2 × 90 sec each',notes:'Hinge at hip. Keep spine neutral.'},
+          ]}
+        },
+        {
+          id:'B', label:'Upper', tag:'Back Thickness',
+          warmup:{ dur:'10 min', exs:[
+            {n:'Band Pull-Apart',r:'3 × 20',notes:'Heavier band than Phase 1.'},
+            {n:'Face Pull (warm-up weight)',r:'2 × 20',notes:'Shoulder health ritual.'},
+            {n:'Thoracic Rotation',r:'2 × 10 each',notes:''},
+          ]},
+          workout:[
+            {n:'Barbell Bent-Over Row',s:'5',r:'5',rest:'2–3 min',load:'HEAVY — mirror the squat intensity',notes:'Overhand grip. Hinge at hip. Pull to navel. No bouncing.'},
+            {n:'Weighted Pull-Up / Lat Pulldown',s:'4',r:'6–8',rest:'2 min',load:'Heavy',notes:'Add weight with dip belt when bodyweight becomes easy.'},
+            {n:'Seated Cable Row (close grip)',s:'3',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:'Full stretch. Full contraction.'},
+            {n:'Overhead Press (standing)',s:'4',r:'6–8',rest:'2 min',load:'Heavy — this should be going up',notes:'Standing is harder and better. Strict form.'},
+            {n:'Face Pull',s:'4',r:'15–20',rest:'60s',load:'Moderate',notes:'Non-negotiable. Balances all the pressing.'},
+            {n:'Hammer Curl',s:'3',r:'10–12',rest:'60s',load:'Moderate',notes:'Brachialis development. Arm thickness.'},
+          ],
+          cooldown:{ dur:'8 min', exs:[
+            {n:'Thoracic Foam Roll',r:'1 × 3 min',notes:''},
+            {n:'Lat Stretch (overhead, side lean)',r:'2 × 90 sec each',notes:''},
+          ]}
+        },
+        {
+          id:'C', label:'Lower B', tag:'Deadlift Focus',
+          warmup:{ dur:'15 min', exs:[
+            {n:'Jefferson Curl (light)',r:'3 × 5 slow reps',notes:'Decompress + lengthen.'},
+            {n:'Good Morning (barbell, light)',r:'3 × 10',notes:'Hip hinge rehearsal. Flat back is mandatory.'},
+            {n:'Hip Circle',r:'2 × 10 each direction',notes:''},
+            {n:'Deadlift ramp-up (very light)',r:'3 × 5',notes:'Groove the pattern before loading. Non-negotiable.'},
+          ]},
+          workout:[
+            {n:'Conventional Deadlift',s:'5',r:'3–5',rest:'3–4 min',load:'HEAVY — primary strength expression',notes:'Setup: feet hip-width, bar over mid-foot. Brace. Lat spread. Push floor away. Bar stays against body.'},
+            {n:'Romanian Deadlift',s:'4',r:'8–10',rest:'2 min',load:'Moderate',notes:'After conventional deads. Hamstring volume.'},
+            {n:'Bulgarian Split Squat',s:'4',r:'8 each',rest:'2 min',load:'Add DBs now. Getting heavier.',notes:'Slow eccentric (3 sec). Build unilateral strength.'},
+            {n:'Leg Curl',s:'4',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:'Hamstring isolation. Control the weight.'},
+            {n:'Standing Calf Raise',s:'4',r:'15',rest:'60s',load:'Heavy',notes:'Gastroc focus. Full ROM.'},
+          ],
+          cooldown:{ dur:'12 min', exs:[
+            {n:'90/90 Hip Stretch',r:'2 × 2 min each side',notes:'Long passive hold. Let the hip open.'},
+            {n:'Lying Hamstring Stretch (strap)',r:'2 × 90 sec each',notes:'Pull leg toward you. Keep other leg flat.'},
+            {n:'Spinal Decompression Hang',r:'3 × 30 sec',notes:'Dead hang from pull-up bar. Decompress after heavy loading.'},
+          ]}
+        },
+        {
+          id:'D', label:'Upper B', tag:'Press + Core Strength',
+          warmup:{ dur:'10 min', exs:[
+            {n:'Slow Push-Up',r:'2 × 10',notes:''},
+            {n:'Band Pull-Apart',r:'3 × 15',notes:''},
+            {n:'Shoulder CARs',r:'2 × 5 each',notes:''},
+          ]},
+          workout:[
+            {n:'Incline Barbell Press',s:'5',r:'5',rest:'2–3 min',load:'HEAVY',notes:'Strong upper chest. Controlled descent.'},
+            {n:'Flat DB Press',s:'3',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:''},
+            {n:'Weighted Dips',s:'4',r:'8–10',rest:'2 min',load:'Add weight via belt',notes:'Slight lean for chest focus.'},
+            {n:'Tricep Overhead Extension',s:'3',r:'12–15',rest:'60s',load:'Moderate',notes:'Long head of tricep. Big arm builder.'},
+            {n:'Ab Wheel Rollout',s:'4',r:'10–12',rest:'60s',load:'Bodyweight',notes:'Fully extend. Don\'t let lower back drop.'},
+            {n:'Farmers Carry',s:'4',r:'40m walk',rest:'90s',load:'Heavy DBs or trap bar',notes:'Grip, core, traps. Incredible for overall density.'},
+          ],
+          cooldown:{ dur:'8 min', exs:[
+            {n:'Thoracic Foam Roll',r:'1 × 3 min',notes:''},
+            {n:'Chest / Shoulder Stretch',r:'2 × 60 sec',notes:''},
+          ]}
+        }
+      ]
+    },
+    {
+      name:'Phase 3', subtitle:'Strength & Mass', weeks:'Weeks 11–16',
+      desc:'Peak loading. Wave loading on squats. Heavy singles on deadlift. Rack pulls above your deadlift max for overload. This is where the frame is built.',
+      targets:['Conventional deadlift 2.0× BW','Back squat 1.5× BW','Rack pull 2.5× BW','Overhead press 0.75× BW'],
+      days:[
+        {
+          id:'A', label:'Lower A', tag:'Max Squat Strength',
+          warmup:{ dur:'15 min', exs:[
+            {n:'Full mobility circuit',r:'15 min',notes:'Deep squat hold, 90/90, ankle drill, hip CARs, box squat. Combined Phase 1–2 routine.'},
+          ]},
+          workout:[
+            {n:'Back Squat (wave loading)',s:'6',r:'5/3/1/5/3/1',rest:'3–4 min',load:'HEAVY — week-over-week progression',notes:'Wave: set 1 moderate, set 2 heavier, set 3 near-max. Repeat. Builds peak strength.'},
+            {n:'Paused Squat',s:'3',r:'3',rest:'3 min',load:'~70% of top squat',notes:'2-sec pause at bottom. Kills the stretch reflex. Brutally effective.'},
+            {n:'Hack Squat or Leg Press',s:'4',r:'10–15',rest:'90s',load:'Heavy',notes:'Volume after intensity.'},
+            {n:'Hip Thrust',s:'5',r:'6–8',rest:'2 min',load:'Heavy — significantly more than Phase 1',notes:'This should be a big number by now.'},
+            {n:'Single Leg Press',s:'3',r:'12 each',rest:'60s',load:'Moderate',notes:'Balance and unilateral volume.'},
+          ],
+          cooldown:{ dur:'12 min', exs:[
+            {n:'Full lower body stretch circuit',r:'12 min',notes:'Hip flexor, pigeon, hamstring, spinal decompression hang.'},
+          ]}
+        },
+        {
+          id:'B', label:'Upper', tag:'Row & Press Heavy',
+          warmup:{ dur:'10 min', exs:[
+            {n:'Shoulder health circuit',r:'10 min',notes:'Band pull-aparts, face pulls, shoulder CARs, wall angels.'},
+          ]},
+          workout:[
+            {n:'Barbell Row (heavy)',s:'6',r:'4–6',rest:'2–3 min',load:'HEAVY — your back squat equivalent',notes:'Go heavy. This is a strength lift now.'},
+            {n:'Weighted Pull-Up',s:'5',r:'5',rest:'2 min',load:'Add significant weight',notes:'If bodyweight is easy, add 10–20kg.'},
+            {n:'Cable Row (wide grip)',s:'3',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:''},
+            {n:'Strict Overhead Press',s:'5',r:'3–5',rest:'2–3 min',load:'HEAVY',notes:'No leg drive. Pure pressing strength.'},
+            {n:'Face Pull',s:'4',r:'20',rest:'60s',load:'Moderate',notes:'Shoulder longevity. Never skip.'},
+            {n:'EZ Bar Curl (heavy)',s:'4',r:'6–8',rest:'90s',load:'Heavy',notes:'Arm mass. Controlled form.'},
+          ],
+          cooldown:{ dur:'8 min', exs:[
+            {n:'Upper body stretch circuit',r:'8 min',notes:'Thoracic foam roll, lat stretch, pec stretch.'},
+          ]}
+        },
+        {
+          id:'C', label:'Lower B', tag:'Deadlift + Rack Pull',
+          warmup:{ dur:'15 min', exs:[
+            {n:'Full posterior chain activation',r:'15 min',notes:'Jefferson curl, good morning, hip circle, light deadlift ramp-up sets.'},
+          ]},
+          workout:[
+            {n:'Conventional Deadlift (ramp to heavy single)',s:'5+',r:'5/4/3/2/1',rest:'4–5 min',load:'BUILD TO NEAR-MAX SINGLE',notes:'Last set is a heavy single — a personal best attempt. Safe ramp-up is mandatory.'},
+            {n:'Rack Pull (from mid-shin)',s:'3',r:'3–5',rest:'3–4 min',load:'HEAVIER than deadlift max — overload',notes:'Handles more weight than floor pull. Builds lockout and teaches heavier loads.'},
+            {n:'RDL',s:'4',r:'8',rest:'2 min',load:'Heavy',notes:'Hamstring volume after heavy pulls.'},
+            {n:'Nordic Hamstring Curl',s:'3',r:'5–8',rest:'2 min',load:'Bodyweight (brutally hard)',notes:'Eccentric hamstring strength. Injury prevention.'},
+            {n:'Farmers Carry',s:'4',r:'50m',rest:'90s',load:'Heaviest you can walk with',notes:'Full body density. Grip, core, traps.'},
+          ],
+          cooldown:{ dur:'15 min', exs:[
+            {n:'Full decompression circuit',r:'15 min',notes:'Hang, 90/90, Jefferson curl, pigeon, hamstring stretch.'},
+          ]}
+        },
+        {
+          id:'D', label:'Upper B', tag:'Chest + Triceps + Carry',
+          warmup:{ dur:'10 min', exs:[
+            {n:'Push-up and shoulder activation',r:'10 min',notes:'Slow push-ups, band pull-apart, shoulder CARs.'},
+          ]},
+          workout:[
+            {n:'Incline Barbell Press (heavy)',s:'5',r:'3–5',rest:'3 min',load:'HEAVY — aim for Phase 3 PR every 2 weeks',notes:''},
+            {n:'Weighted Dips (heavy)',s:'4',r:'6–8',rest:'2 min',load:'Heavy belt',notes:''},
+            {n:'Flat DB Press',s:'3',r:'10–12',rest:'90s',load:'Moderate-heavy',notes:''},
+            {n:'Close-Grip Bench Press',s:'3',r:'8–10',rest:'90s',load:'Moderate',notes:'Tricep mass builder.'},
+            {n:'Loaded Carry Medley',s:'4',r:'Farmers 30m + plate hug 20m',rest:'2 min',load:'Heavy',notes:'Full body density. Non-negotiable in Phase 3.'},
+            {n:'Weighted Plank',s:'3',r:'45–60 sec',rest:'60s',load:'Add plate on back',notes:'Core stability under load.'},
+          ],
+          cooldown:{ dur:'8 min', exs:[
+            {n:'Full upper stretch circuit',r:'8 min',notes:'Thoracic foam roll, lat, pec, shoulder.'},
+          ]}
+        }
+      ]
+    }
+  ],
+  mobilityDaily:{
+    p1:{ label:'Phase 1 · Wks 1–4', dur:'10–12 min', note:'Learning positions. Assisted where needed. Just get into the positions correctly — depth and duration come later.', exs:[
+      {n:'90/90 Hip Switch',d:'2 min',r:'Slow switches, hold 20 sec each side',notes:'Don\'t force range. Breathe and settle.'},
+      {n:'Deep Squat Hold (assisted)',d:'90 sec',r:'Hold doorframe or TRX. Chest up.',notes:'Build depth gradually. If heels rise, use a 2.5kg plate under them.'},
+      {n:'Ankle Wall Stretch',d:'45 sec each side',r:'Knee drives toward 4th toe',notes:'Start 10cm from wall. Aim to close the gap over 4 weeks.'},
+      {n:'Cat-Cow',d:'1 min',r:'8–10 slow reps',notes:'Initiate from pelvis, move up through spine. Slow.'},
+      {n:'Hip Flexor Lunge (low)',d:'45 sec each side',r:'Static hold, pelvic tuck',notes:'Feel the front of the hip. Don\'t let lower back arch.'},
+      {n:'Thoracic Rotation (seated)',d:'45 sec each side',r:'10 reps each side',notes:'Hand behind head. Rotate from mid-back, not lower.'},
+    ]},
+    p2:{ label:'Phase 2 · Wks 5–10', dur:'12–14 min', note:'Deeper holds, unassisted where possible. Start adding light load to some movements. Duration increases.', exs:[
+      {n:'90/90 Hip Switch + Active Hold',d:'3 min',r:'Switches + 30 sec holds each side',notes:'Add a forward fold over the front shin at end of each hold.'},
+      {n:'Deep Squat Hold (unassisted)',d:'2 min',r:'Arms forward for balance if needed',notes:'Heels flat on floor is the goal. Use plate under heels only if still needed.'},
+      {n:'Ankle Wall Stretch',d:'60 sec each side',r:'Knee past toes target',notes:'Aim for 5cm gap or less. Add 5 slow knee drives at end of each hold.'},
+      {n:'Cat-Cow + Thread the Needle',d:'2 min',r:'5 cat-cows then 5 thread-the-needle each side',notes:'Thread: from all-fours, slide one arm under body, rotate thoracic. Huge for posture.'},
+      {n:'Couch Stretch (hip flexor)',d:'90 sec each side',r:'Rear foot against wall, tall torso',notes:'More aggressive than the lunge. Clears up hip extension for squats significantly.'},
+      {n:'Jefferson Curl (bodyweight)',d:'1 min',r:'5 slow reps — fully controlled descent',notes:'Stand on a step or plates. Chin to chest, roll down vertebra by vertebra. Decompress spine.'},
+    ]},
+    p3:{ label:'Phase 3 · Wks 11–16', dur:'14–16 min', note:'End-range strength. Movements now train mobility AND strength simultaneously. This is the highest level — where permanent change locks in.', exs:[
+      {n:'90/90 Hip CARs (Controlled Articular Rotations)',d:'3 min',r:'5 full rotations each hip, each direction',notes:'Own every degree of the circle. Slow. This is active mobility, not passive stretching.'},
+      {n:'Deep Squat + Hip Shift',d:'2 min',r:'Squat hold, shift weight side to side',notes:'Load each hip alternately in the squat. Builds active hip mobility.'},
+      {n:'Ankle CAR',d:'60 sec each side',r:'5 full ankle rotations each direction',notes:'Controlled circles. Seated or standing. Maximise range.'},
+      {n:'Jefferson Curl (light plate 5–10kg)',d:'90 sec',r:'6 slow weighted reps',notes:'Loaded hamstring lengthening under tension. The most effective hamstring mobility drill that exists.'},
+      {n:'Couch Stretch with Posterior Tilt',d:'2 min each side',r:'Hold + active pelvic tuck pulses',notes:'Active version. Builds hip extension strength, not just flexibility.'},
+      {n:'Thoracic Extension over Foam Roller',d:'2 min',r:'Slow, breathe into each segment',notes:'Arms crossed on chest. Pause 5 sec at tight spots. Full thoracic coverage.'},
+    ]},
+  },
+  mobilityDedicated:[
+    {
+      phase:'Phase 1', label:'Dedicated Session (Tue & Sat)', dur:'20–22 min',
+      note:'Twice a week on off-days. This is where the real structural change happens — longer holds, more focused work on your specific limiters.',
+      sections:[
+        { title:'Posterior Chain (8 min)', color:'#e8c547', exs:[
+          {n:'Lying Hamstring Stretch (strap or towel)',d:'90 sec each leg',notes:'Keep opposite leg flat. Pull toward face. Hold at point of tension, not pain.'},
+          {n:'Seated Forward Fold',d:'2 min',notes:'Hinge at hip, not waist. Spine long. Reach shins or ankles. Let gravity do it.'},
+          {n:'Standing Hip Hinge to Stretch',d:'1 min',notes:'Soft knee, push hips back, hands slide down shins. Feel hamstring load.'},
+        ]},
+        { title:'Hip & Groin (7 min)', color:'#e87c47', exs:[
+          {n:'Pigeon Pose (each side)',d:'90 sec each side',notes:'Hips square. Let the hip externally rotate. Breathe. Don\'t prop up on hands.'},
+          {n:'Frog Stretch',d:'2 min',notes:'All-fours, knees wide, feet in line with knees. Rock forward and back gently.'},
+          {n:'Adductor Stretch (side lunge)',d:'45 sec each side',notes:'One leg straight, sit into the bent leg. Foot of straight leg flat.'},
+        ]},
+        { title:'Posture & Shoulders (7 min)', color:'#4ca868', exs:[
+          {n:'Pec Minor Stretch (doorway)',d:'60 sec each side',notes:'Arm at 90°, forearm on door frame. Turn away. Feel front of shoulder and pec.'},
+          {n:'Wall Angels',d:'2 min',notes:'10 slow reps. Full contact: head, mid-back, sacrum. Arms slide up and down. This is harder than it looks.'},
+          {n:'Prone Y-T-W (floor)',d:'90 sec',notes:'Lie face down, arms in Y then T then W shape. Lift and hold 2 sec each. Lower traps + serratus.'},
+          {n:'Chin Tuck',d:'1 min',notes:'Standing or seated. Gently pull chin straight back (double chin position). 10 reps × 3 sets. Fixes forward head.'},
+        ]},
+      ]
+    },
+    {
+      phase:'Phase 2', label:'Dedicated Session (Tue & Sat)', dur:'22–25 min',
+      note:'Holds get longer, some movements become loaded. You should feel noticeably more range than Phase 1 in most areas.',
+      sections:[
+        { title:'Posterior Chain (9 min)', color:'#e8c547', exs:[
+          {n:'Jefferson Curl (bodyweight, 6 slow reps)',d:'2 min',notes:'Vertebra by vertebra descent and return. Pause at bottom 2 sec. Cumulative hamstring lengthening.'},
+          {n:'Elevated Hamstring Stretch (foot on bench)',d:'90 sec each side',notes:'Hip hinge over elevated leg. More range than floor stretch.'},
+          {n:'Good Morning stretch (bodyweight, slow)',d:'2 min',notes:'Hip hinge pattern with long hold at bottom. Teaching the body to be comfortable loaded at length.'},
+        ]},
+        { title:'Hip & Groin (8 min)', color:'#e87c47', exs:[
+          {n:'Couch Stretch',d:'90 sec each side',notes:'Rear foot against wall. More aggressive hip flexor work. Full pelvic tuck.'},
+          {n:'Pigeon Pose + Forward Fold',d:'2 min each side',notes:'Walk hands forward in the pigeon. Deeper hip capsule stretch.'},
+          {n:'Copenhagen Plank (short lever)',d:'20 sec each side × 3',notes:'Side plank with lower shin on bench. Groin strength and hip adductor mobility simultaneously.'},
+        ]},
+        { title:'Posture & Shoulders (8 min)', color:'#4ca868', exs:[
+          {n:'Band Dislocates (very light band)',d:'2 min',notes:'Wide grip. Slowly pass band from front to back overhead and return. Shoulder mobility + pec stretch.'},
+          {n:'Wall Angels + Reach',d:'2 min',notes:'Full wall contact, add a reach forward at top before returning. More serratus activation.'},
+          {n:'Prone Y-T-W (light DBs 1–2kg)',d:'2 min',notes:'Same as Phase 1 but weighted. 8 reps each position. Lower trap + rhomboid endurance.'},
+          {n:'Neck Side Stretch + Levator Scap',d:'45 sec each side',notes:'Ear to shoulder, hand gently adds pressure. Then rotate 45° down — targets levator scapulae (the tight muscle in rounded shoulders).'},
+        ]},
+      ]
+    },
+    {
+      phase:'Phase 3', label:'Dedicated Session (Tue & Sat)', dur:'25 min',
+      note:'End-range strength work. Most movements now have an active component — you\'re not just passively stretching, you\'re building strength in the new range.',
+      sections:[
+        { title:'Posterior Chain (9 min)', color:'#e8c547', exs:[
+          {n:'Jefferson Curl (5–10kg plate)',d:'3 min',notes:'6–8 slow weighted reps. Fully loaded hamstring mobility. Nothing touches this for long-term posterior chain length.'},
+          {n:'Nordic Hamstring Curl (eccentric only)',d:'3 min',notes:'5–6 slow reps. Kneel, anchor feet. Lower yourself as slowly as possible. Builds end-range hamstring strength — injury prevention + mobility.'},
+          {n:'Active Hamstring March',d:'2 min',notes:'Standing, kick each leg up in a controlled march. Hip flexor AND hamstring working simultaneously. 15 each side.'},
+        ]},
+        { title:'Hip & Groin (8 min)', color:'#e87c47', exs:[
+          {n:'Hip CAR (standing)',d:'3 min',notes:'5 full rotations each hip each direction. Slow. Own every degree. Active mobility, not passive.'},
+          {n:'Copenhagen Plank (long lever)',d:'30 sec each side × 3',notes:'Progress from Phase 2 short lever. Full adductor + hip load.'},
+          {n:'Loaded Hip Flexor Stretch (1 plate on knee)',d:'60 sec each side',notes:'Kneeling lunge, rest a weight plate on the front thigh. Loaded stretch = faster adaptation.'},
+        ]},
+        { title:'Posture & Shoulders (8 min)', color:'#4ca868', exs:[
+          {n:'Band Dislocates + Pause Overhead',d:'2 min',notes:'Pause 3 sec overhead each rep. Loaded end-range shoulder mobility.'},
+          {n:'Prone Y-T-W (3–4kg DBs)',d:'2 min',notes:'8 reps each position. Significant lower trap and serratus strength by now.'},
+          {n:'Scapular Pull-Up (dead hang + retract)',d:'2 min',notes:'Dead hang, then retract and depress scapulae without bending elbows. 10 reps. Builds scapular control under load — directly fixes the rounding.'},
+          {n:'Doorway Pec Stretch + Active Retraction',d:'2 min',notes:'Pec stretch in doorway, actively pinch shoulder blades at end of each stretch. Teaches the new position.'},
+        ]},
+      ]
+    },
+  ],
+  mobilityPosture:{
+    title:'Rounded Shoulder & Posture Protocol',
+    note:'Do this daily — takes 5 min. These are the targeted exercises specifically for your rounded shoulders and forward head. They work on top of the general mobility work.',
+    cause:'Rounded shoulders = tight pecs pulling shoulders forward + weak lower traps/serratus that can\'t hold scapulae back + stiff thoracic spine that can\'t extend. All three must be addressed.',
+    exs:[
+      {n:'Chin Tuck',sets:'3 × 10',hold:'2 sec each',notes:'Single most important posture exercise. Sits at desk, standing, anywhere. Pull chin straight back. Counteracts forward head from screens.'},
+      {n:'Wall Angel',sets:'2 × 10',hold:'Slow — 3 sec up, 3 sec down',notes:'Full posterior chain contact. Arms slide up wall. If you can\'t keep contact, work on range progressively.'},
+      {n:'Band Pull-Apart',sets:'3 × 20',hold:'1 sec squeeze at end range',notes:'Light band. Arms straight. Squeeze shoulder blades at end. Directly strengthens the muscles that hold your shoulders back.'},
+      {n:'Prone Y-T-W',sets:'2 × 8 each',hold:'2 sec hold at top',notes:'No weight at start. Y = thumbs up overhead, T = arms out to sides, W = elbows bent 90°. Lower traps and serratus — the postural muscles most people never train.'},
+      {n:'Doorway Pec Stretch',sets:'2 × 60 sec each side',hold:'Static',notes:'Arm at 90° on door frame. Step through. Essential for undoing the tightness that pulls shoulders forward.'},
+    ]
+  },
+  mobilityCore:{
+    title:'Core Bracing — The 360° Technique',
+    note:'This is a skill, not an exercise. Learning this correctly is what separates people who get hurt lifting heavy from people who don\'t. Practice it every session before any loaded work.',
+    steps:[
+      {n:'Step 1: Find neutral spine',detail:'Stand tall. Tilt pelvis forward and back slightly. Find the midpoint — neither fully anterior nor posterior tilted. This is neutral. This is where you lift from.'},
+      {n:'Step 2: Big breath into your belly',detail:'Breathe deep through your nose — push your belly OUT, not up. Your chest should barely move. You\'re filling the space around your spine with air pressure, not lifting your chest.'},
+      {n:'Step 3: 360° brace',detail:'With air in your belly, brace as if you\'re about to get punched from all sides — front, back, and sides simultaneously. Your whole trunk should feel rigid. This is intra-abdominal pressure.'},
+      {n:'Step 4: Hold through the lift',detail:'Hold this brace through the hardest part of the movement. Exhale at the top or on the way up, never at the bottom or initiation. For very heavy singles, you can hold the whole rep.'},
+      {n:'Step 5: Practice daily',detail:'Practise the brace standing, then in a hip hinge, then in a squat pattern, before you add any weight. It should feel automatic within 2 weeks.'},
+    ],
+    drill:{n:'Brace Drill (do before every session)',sets:'3 × 5 reps',detail:'Stand or sit. Take a big belly breath, brace hard, hold 5 seconds, release. Repeat. Teaches the nervous system the pattern before loading it.'}
+  },
+  nutrition:[
+    {label:'Calories',val:'Bodyweight (kg) × 33–38 kcal',detail:'Lower end for moderate surplus, upper for aggressive building. Track for 2 weeks to find your baseline.'},
+    {label:'Protein',val:'2.0–2.2g per kg bodyweight',detail:'Non-negotiable. Spread across 4–5 meals. Meat, eggs, dairy, legumes. No fish needed — plenty of other sources.'},
+    {label:'Carbs',val:'3–5g per kg bodyweight',detail:'Your fuel. Centre them around training — before and after. Rice, oats, potatoes, pasta, bread.'},
+    {label:'Fats',val:'0.8–1.0g per kg bodyweight',detail:'Hormonal health. Olive oil, eggs, nuts, avocado, cheese. Don\'t cut these.'},
+    {label:'Gym days (Mon–Fri)',val:'Train 7–7:30am',detail:'Eat something light before if possible. Main breakfast after. Protein shake immediately post-gym covers the window.'},
+    {label:'Hydration',val:'3.5–4 litres daily',detail:'More on training days. Carry a bottle to the office. Dehydration tanks focus and performance equally.'},
+    {label:'Creatine',val:'5g daily',detail:'Most evidence-backed supplement for strength and size. Stir into yoghurt or shake — tasteless. No loading phase needed.'},
+  ],
+  trainingDaySchedule:[
+    {time:'6:30am',label:'Pre-gym (optional)',emoji:'⚡',desc:'Banana + handful of almonds, or a small yoghurt pot. Something light — you don\'t want a full stomach lifting.',kcal:'~200 kcal'},
+    {time:'7:00am',label:'Train',emoji:'🏋️',desc:'45–50 min session.',kcal:''},
+    {time:'8:15am',label:'Post-gym breakfast',emoji:'🍳',desc:'Main breakfast — see options below. This is your biggest meal of the day.',kcal:'~700–800 kcal'},
+    {time:'11:00am',label:'Mid-morning snack',emoji:'🥜',desc:'At desk. Small but protein-focused.',kcal:'~250–300 kcal'},
+    {time:'1:00pm',label:'Lunch',emoji:'🍱',desc:'Packed lunch or office option — see below. Needs to be substantial.',kcal:'~650–750 kcal'},
+    {time:'3:30pm',label:'Afternoon snack',emoji:'🍫',desc:'Keeps energy up and stops dinner being too massive.',kcal:'~200–250 kcal'},
+    {time:'7:00pm',label:'Dinner',emoji:'🍽️',desc:'Large meal. You\'ve earned it. See options below.',kcal:'~800–900 kcal'},
+    {time:'9:00pm',label:'Evening (optional)',emoji:'🥛',desc:'If total calories feel short — Greek yoghurt with nuts and honey before bed.',kcal:'~300 kcal'},
+  ],
+  breakfasts:[
+    {
+      name:'Your Existing Bowl — Upgraded',
+      tag:'Keep doing this · +5 min',
+      office:'Home',
+      kcal:'~700 kcal · ~35g protein',
+      items:['250g full-fat Greek yoghurt (not low-fat)','1 tbsp maple syrup','1 tbsp chia seeds','1 tbsp sunflower seeds','40g granola','Small handful mixed nuts (almonds, cashews, walnuts)','1 banana sliced on top'],
+      tip:'Add a scoop of unflavoured protein powder stirred into the yoghurt to push protein to ~55g without changing the taste or texture.',
+    },
+    {
+      name:'Eggs, Potatoes & Toast',
+      tag:'High protein · Filling',
+      office:'Home',
+      kcal:'~750 kcal · ~45g protein',
+      items:['3–4 scrambled or fried eggs','150g cooked new potatoes (batch cook night before, pan fry in 5 min)','2 slices sourdough or seeded bread','Handful cherry tomatoes','Coffee with whole milk'],
+      tip:'Batch boil potatoes on Sunday. Fridge keeps 4 days. Morning fry takes 3 minutes.',
+    },
+    {
+      name:'Overnight Oats (prep the night before)',
+      tag:'Zero morning effort · Office-friendly',
+      office:'Home or office fridge',
+      kcal:'~680 kcal · ~40g protein',
+      items:['80g rolled oats','250g Greek yoghurt','200ml whole milk','1 tbsp chia seeds','1 tbsp almond butter','1 tsp maple syrup','Banana or berries on top in the morning'],
+      tip:'Mix everything except fruit the night before in a jar or container. Grab and go. Eat cold at desk or at home.',
+    },
+    {
+      name:'High-Protein Wrap (5 min)',
+      tag:'Fast · Easy to eat on commute',
+      office:'Home',
+      kcal:'~650 kcal · ~50g protein',
+      items:['2 large tortilla wraps','4 scrambled eggs','50g cheddar or feta','Handful spinach','Hot sauce or salsa','Optional: leftover chicken or mince from night before'],
+      tip:'Scramble eggs, throw in cheese and spinach, wrap and eat. Takes under 5 minutes. Can eat walking to the tube.',
+    },
+  ],
+  lunches:[
+    {
+      name:'Batch Rice Bowl (Meal Prep)',
+      tag:'Best value · High protein · Office microwave',
+      office:'Packed from home · Microwave',
+      kcal:'~750 kcal · ~55g protein',
+      items:['200g cooked chicken thigh or breast (season with paprika, garlic, olive oil)','150g cooked rice (white or basmati)','Roasted peppers, courgette, or any veg you like','1 tbsp olive oil drizzle','Pinch of chilli flakes + squeeze of lemon'],
+      tip:'Cook 4–5 portions on Sunday evening. Keeps 4 days in the fridge. Reheat 2 min in office microwave. Cheaper than any food truck option.',
+    },
+    {
+      name:'Upgraded Bean & Chicken Wrap',
+      tag:'Your existing wrap · Made more filling',
+      office:'Packed from home · No microwave needed',
+      kcal:'~700 kcal · ~50g protein',
+      items:['2 large wholemeal tortillas (not 1)','150g cooked chicken breast or thigh, sliced','100g black beans or mixed beans (tin, drained)','50g cheddar or mixed cheese','Lettuce, tomato, avocado if available','Greek yoghurt or sour cream instead of mayo'],
+      tip:'The reason your current wrap is unfilling: one wrap, not enough protein, no starchy carb. Two wraps + beans + cheese fixes all three.',
+    },
+    {
+      name:'Pasta with Chicken & Pesto',
+      tag:'Bulk meal prep · Very filling',
+      office:'Packed from home · Microwave or cold',
+      kcal:'~800 kcal · ~55g protein',
+      items:['150g pasta (dry weight) — penne or fusilli','200g chicken thigh, pan fried and sliced','2 tbsp green pesto','Handful cherry tomatoes, halved','30g parmesan or cheddar grated on top','Black pepper + olive oil'],
+      tip:'Works hot or cold — eat it straight from the container if microwave is busy. Pasta is ideal for training days, loads of carbs.',
+    },
+    {
+      name:'Better M&S / Office Option',
+      tag:'When you haven\'t prepped · Office buy',
+      office:'Office purchase',
+      kcal:'~650–700 kcal · ~45g protein',
+      items:['M&S or Pret: protein pot + sandwich or wrap (not just salad)','Add a side of: rice pot, pasta pot, or couscous — not just salad and fries','Grab a yoghurt or protein bar on top','Water — not juice or fizzy'],
+      tip:'The M&S salad + fries combo is ~400 kcal and low protein. Adding a protein pot and grain side gets you to a proper meal without much extra cost.',
+    },
+  ],
+  snacks:[
+    {time:'Mid-morning (11am)',items:[
+      {n:'Greek yoghurt pot (150g) + almonds',k:'~300 kcal · 20g protein',easy:'✓ Desk friendly'},
+      {n:'Protein shake + banana',k:'~280 kcal · 25g protein',easy:'✓ 60 sec prep'},
+      {n:'Rice cakes (4) + peanut butter + honey',k:'~300 kcal · 8g protein',easy:'✓ No fridge needed'},
+      {n:'Handful mixed nuts + piece of fruit',k:'~250 kcal · 6g protein',easy:'✓ Bag in your drawer'},
+    ]},
+    {time:'Afternoon (3:30pm)',items:[
+      {n:'Protein bar (e.g. Grenade, Fulfil, PhD)',k:'~200 kcal · 20g protein',easy:'✓ Bag or drawer'},
+      {n:'Cheese + oatcakes (3–4)',k:'~250 kcal · 12g protein',easy:'✓ Fridge at work'},
+      {n:'Boiled eggs x2 + salt',k:'~160 kcal · 14g protein',easy:'✓ Batch boil Sunday'},
+      {n:'Overnight oats leftovers if not eaten at breakfast',k:'~350 kcal · 20g protein',easy:'✓ Already prepped'},
+    ]},
+  ],
+  dinners:[
+    {
+      name:'Chicken Thigh & Roast Potatoes',
+      tag:'Simple · Big · Crowd pleaser',
+      time:'30 min',
+      kcal:'~850 kcal · ~55g protein',
+      items:['4 chicken thighs (bone-in or boneless)','400g potatoes, quartered','1 red onion, olive oil, garlic, paprika, oregano','Roasted peppers or any veg alongside'],
+      tip:'Toss everything in olive oil and seasoning, one tray, 200°C for 30 min. Zero effort. Make extra for lunch tomorrow.',
+    },
+    {
+      name:'Beef Mince Bolognese or Chilli',
+      tag:'Batch cook · 4 portions · Freezes well',
+      time:'40 min',
+      kcal:'~900 kcal · ~60g protein',
+      items:['500g beef mince (20% fat for flavour)','1 tin chopped tomatoes + 1 tin kidney beans (chilli) or just tomatoes (bol)','Onion, garlic, carrot, celery','Pasta, rice, or jacket potato to serve','Grated cheese on top'],
+      tip:'Make 4 portions at once. Fridge 4 days, freezer 3 months. Perfect for nights you don\'t want to cook.',
+    },
+    {
+      name:'Chicken Noodle Stir Fry',
+      tag:'15 min · Uses noodles you like',
+      time:'15 min',
+      kcal:'~750 kcal · ~50g protein',
+      items:['200g chicken breast or thigh, sliced thin','200g noodles (egg or rice noodles)','Mixed veg: peppers, broccoli, spring onions, pak choi','2 tbsp soy sauce + 1 tbsp oyster sauce + sesame oil','Garlic + ginger + chilli'],
+      tip:'Fastest dinner on the list. Have all veg pre-chopped in a bag. Wok on highest heat, done in 12 minutes.',
+    },
+    {
+      name:'Beef or Lamb Mince Tacos / Rice Bowl',
+      tag:'Fun · Flexible · Good macros',
+      time:'20 min',
+      kcal:'~850 kcal · ~55g protein',
+      items:['400g beef or lamb mince','Taco seasoning (or: cumin, paprika, garlic, chilli)','Rice or taco shells / wraps','Toppings: sour cream, cheddar, salsa, lettuce, avocado','Black beans from a tin, drained'],
+      tip:'Works as tacos, a burrito bowl, or wraps. Rice base = more carbs = better for training days.',
+    },
+    {
+      name:'Peri-peri Chicken Thighs & Rice',
+      tag:'Easy marinade · Your food-truck equivalent at home',
+      time:'35 min (10 min active)',
+      kcal:'~800 kcal · ~55g protein',
+      items:['4–6 chicken thighs','Peri-peri sauce or marinade (Nando\'s sauce works)','200g rice','Corn on the cob or veg on the side','Squeeze of lemon at the end'],
+      tip:'Marinate the night before (5 min). Cook the next evening. Tastes like the food trucks, costs a fraction.',
+    },
+    {
+      name:'Pasta with Beef Mince Sauce',
+      tag:'Bulk · Cheap · High carb training day',
+      time:'25 min',
+      kcal:'~950 kcal · ~60g protein',
+      items:['150g pasta (dry)','300g beef mince','Jar of passata or chopped tomatoes','Garlic, onion, olive oil, Italian herbs','Parmesan or cheddar grated on top'],
+      tip:'This is the highest carb option — ideal on lower A or lower B days when you\'ve had a big squat or deadlift session.',
+    },
+  ],
+  shopping:[
+    {cat:'Protein', emoji:'🥩', items:['Chicken thighs (1kg pack, boneless) — cheaper than breast, better flavour','Beef mince 500g × 2 (20% fat)','Eggs × 12–18','Greek yoghurt × 2–3 large tubs (full fat)','Cheddar or mixed cheese block','Cottage cheese (optional evening snack)','Protein powder (unflavoured or vanilla — one tub lasts weeks)']},
+    {cat:'Carbs & Grains', emoji:'🍚', items:['White or basmati rice (2kg bag)','Pasta (penne or fusilli, 1kg)','Rolled oats (1kg)','Sourdough or seeded bread','Large tortilla wraps × 8–10','New potatoes or white potatoes (1.5kg)','Granola (your usual)']},
+    {cat:'Tins & Jars', emoji:'🥫', items:['Chopped tomatoes × 4 tins','Kidney beans × 2 tins','Black beans × 2 tins','Mixed beans × 2 tins','Green pesto jar','Passata × 2','Peanut butter (no added sugar)','Nando\'s peri-peri sauce or similar']},
+    {cat:'Produce & Fridge', emoji:'🥦', items:['Bananas × 6–8 (freeze extras)','Mixed peppers × 4','Broccoli','Cherry tomatoes','Spinach (bag)','Spring onions','Garlic bulb','Avocado × 2–3','Lemon × 2']},
+    {cat:'Nuts, Seeds & Snacks', emoji:'🥜', items:['Mixed nuts (almonds, cashews, walnuts) — big bag','Sunflower seeds','Chia seeds','Rice cakes (plain)','Oatcakes','Protein bars × 4–6 (Grenade, Fulfil, or similar)']},
+    {cat:'Condiments & Spices', emoji:'🧂', items:['Olive oil (1L bottle)','Soy sauce','Oyster sauce','Sesame oil (small)','Paprika (smoked)','Cumin','Garlic powder','Chilli flakes','Taco seasoning or mixed herbs']},
+    {cat:'Supplements', emoji:'💊', items:['Creatine monohydrate (500g — lasts ~3 months)','Protein powder if not already (optional but useful)']},
+  ],
+  safety:[
+    'Never skip the warm-up. Cold muscles + heavy weight = injury.',
+    'Use a belt for main compound lifts above 80% of your max. Not a crutch — a tool.',
+    'Film your main lifts from the side. Your brain lies to you about form.',
+    'Rack pulls and deadlifts: if your lower back rounds uncontrollably, the weight is too heavy.',
+    'If something hurts (sharp, joint pain) — stop. Soreness is different from pain.',
+    'Add weight only when you complete all reps with solid form. Never ego-add.',
+    'Sleep 7–9 hours. This is when you actually grow. Non-negotiable.',
+    'Deload every 4th week — reduce volume by 40%. Prevents burnout and injury.',
+  ]
+};
+
+let currentPhase = 0, currentDay = 0, currentSection = 'workout';
+
+function pc() { return PHASE_COLORS[currentPhase]; }
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function setPhase(i) {
+  currentPhase = i; currentDay = 0; currentSection = 'workout';
+  renderPlan();
+}
+
+function setDay(i) {
+  currentDay = i; currentSection = 'workout';
+  renderPlan();
+}
+
+function setSection(s) {
+  currentSection = s;
+  renderPlan();
+}
+
+function tagHTML(label, val, muted) {
+  const c = muted ? '#777' : pc();
+  const bg = muted ? 'rgba(85,85,85,0.12)' : `color-mix(in srgb, ${pc()} 12%, transparent)`;
+  const border = muted ? 'rgba(85,85,85,0.3)' : `color-mix(in srgb, ${pc()} 30%, transparent)`;
+  return `<div style="background:${bg};border:1px solid ${border};border-radius:4px;padding:3px 10px;text-align:center;">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:${c};opacity:0.7;">${label}</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:${c};">${val}</div>
+  </div>`;
+}
+
+function exCardHTML(ex, isWarmup, isCooldown) {
+  let tags = '';
+  if (!isWarmup && !isCooldown) {
+    tags += tagHTML('Sets', ex.s, false);
+    tags += tagHTML('Reps', ex.r, false);
+    tags += tagHTML('Rest', ex.rest, true);
+  } else {
+    tags += tagHTML('Duration', ex.r, false);
+  }
+  return `<div class="ex-card">
+    <div class="ex-name">${ex.n}</div>
+    <div class="ex-tags">${tags}</div>
+    ${ex.load && !isWarmup && !isCooldown ? `<div class="ex-load">⚡ ${ex.load}</div>` : ''}
+    ${ex.notes ? `<div class="ex-notes">${ex.notes}</div>` : ''}
+  </div>`;
+}
+
+function renderPlan() {
+  const phase = data.phases[currentPhase];
+  const day = phase.days[currentDay];
+  const color = pc();
+
+  // Phase pills
+  let phasePills = data.phases.map((p,i) => `
+    <button class="phase-pill ${i===currentPhase?'active':''}" style="${i===currentPhase?`--pc:${PHASE_COLORS[i]};border-color:${PHASE_COLORS[i]};background:color-mix(in srgb,${PHASE_COLORS[i]} 15%,transparent);color:${PHASE_COLORS[i]};`:`border-color:var(--border);color:var(--muted);`}" onclick="setPhase(${i})">
+      ${p.name}: ${p.subtitle}<span>${p.weeks}</span>
+    </button>`).join('');
+
+  // Phase info
+  let phaseInfo = `<div class="phase-info" style="--pc:${color};border-left-color:${color};">
+    <div class="phase-info-label" style="color:${color};">Phase Goal</div>
+    <p>${phase.desc}</p>
+    <div class="target-pills">${phase.targets.map(t=>`<span class="target-pill" style="background:color-mix(in srgb,${color} 15%,transparent);border-color:color-mix(in srgb,${color} 40%,transparent);color:${color};">✓ ${t}</span>`).join('')}</div>
+  </div>`;
+
+  // Day buttons
+  let dayBtns = phase.days.map((d,i) => `
+    <button class="day-btn ${i===currentDay?'active':''}" style="${i===currentDay?`border-color:${color};background:color-mix(in srgb,${color} 15%,transparent);color:${color};`:''}" onclick="setDay(${i})">
+      Day ${d.id}: ${d.label}<span>${d.tag}</span>
+    </button>`).join('');
+
+  // Section toggle
+  const secs = [{id:'warmup',label:`Warm-Up (${day.warmup.dur})`},{id:'workout',label:'Main Workout'},{id:'cooldown',label:`Cooldown (${day.cooldown.dur})`}];
+  let secBtns = secs.map(s=>`<button class="sec-btn ${s.id===currentSection?'active':''}" style="${s.id===currentSection?`border-color:${color};background:color-mix(in srgb,${color} 15%,transparent);color:${color};`:''}" onclick="setSection('${s.id}')">${s.label}</button>`).join('');
+
+  // Exercises
+  let exHTML = '';
+  if (currentSection === 'warmup') {
+    exHTML = `<div class="ex-block-label" style="color:${color};">Warm-Up</div>` + day.warmup.exs.map(e=>exCardHTML(e,true,false)).join('');
+  } else if (currentSection === 'workout') {
+    exHTML = `<div class="ex-block-label" style="color:${color};">Main Workout</div>` + day.workout.map(e=>exCardHTML(e,false,false)).join('');
+  } else {
+    exHTML = `<div class="ex-block-label" style="color:${color};">Cooldown</div>` + day.cooldown.exs.map(e=>exCardHTML(e,false,true)).join('');
+  }
+
+  // Weekly grid
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const labels = ['Lower A','Upper A','Rest','Lower B','Upper B','Rest','Rest'];
+  const active = [0,1,3,4];
+  let weekGrid = days.map((d,i)=>`
+    <div class="week-cell ${active.includes(i)?'on':'off'}" style="${active.includes(i)?`background:color-mix(in srgb,${color} 15%,transparent);border-color:color-mix(in srgb,${color} 40%,transparent);`:''}" >
+      <div class="week-day" style="${active.includes(i)?`color:${color};`:''}">${d}</div>
+      <div class="week-label">${labels[i]}</div>
+    </div>`).join('');
+
+  document.getElementById('tab-plan').innerHTML = `
+    <div class="phase-row">${phasePills}</div>
+    ${phaseInfo}
+    <div class="day-row">${dayBtns}</div>
+    <div class="section-toggle">${secBtns}</div>
+    ${exHTML}
+    <div class="info-card" style="margin-top:20px;">
+      <div class="info-card-label">Weekly Schedule</div>
+      <div class="week-grid">${weekGrid}</div>
+      <div class="deload-note">Every 4th week: <span style="color:${color};">Deload</span> — reduce all sets by 40%, keep weight the same.</div>
+    </div>
+    <div style="height:8px;"></div>
+  `;
+}
+
+let mobTab = 'daily';
+let mobPhase = 0;
+
+function renderMobility() {
+  const subTabs = [
+    {id:'daily', label:'Daily'},
+    {id:'dedicated', label:'2× Sessions'},
+    {id:'posture', label:'Posture'},
+    {id:'core', label:'Core Brace'},
+  ];
+  const subBtns = subTabs.map(t=>`
+    <button onclick="mobTab='${t.id}';renderMobility();" style="
+      flex-shrink:0;padding:8px 14px;border-radius:20px;
+      border:1px solid ${mobTab===t.id?'var(--accent)':'var(--border)'};
+      background:${mobTab===t.id?'rgba(232,197,71,0.15)':'var(--card)'};
+      color:${mobTab===t.id?'var(--accent)':'var(--muted)'};
+      font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;
+      letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">
+      ${t.label}
+    </button>`).join('');
+
+  const phaseBtns = (active, fn) => [0,1,2].map(i=>`
+    <button onclick="${fn}(${i});" style="
+      flex:1;padding:8px 6px;border-radius:5px;
+      border:1px solid ${active===i?PHASE_COLORS[i]:'var(--border)'};
+      background:${active===i?`color-mix(in srgb,${PHASE_COLORS[i]} 15%,transparent)`:'var(--card)'};
+      color:${active===i?PHASE_COLORS[i]:'var(--muted)'};
+      font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;
+      letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;text-align:center;">
+      P${i+1}<span style="display:block;font-size:9px;font-weight:400;opacity:0.7;">${['Wks 1–4','Wks 5–10','Wks 11–16'][i]}</span>
+    </button>`).join('');
+
+  let content = '';
+
+  if (mobTab === 'daily') {
+    const d = data.mobilityDaily;
+    const phases = [d.p1, d.p2, d.p3];
+    const p = phases[mobPhase];
+    const cards = p.exs.map(e=>`
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:13px 14px;margin-bottom:7px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
+        <div style="flex:1;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">${e.n}</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">${e.notes}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;min-width:70px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:${PHASE_COLORS[mobPhase]};">${e.d}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3;">${e.r}</div>
+        </div>
+      </div>`).join('');
+    content = `
+      <div style="display:flex;gap:8px;margin-bottom:14px;">${phaseBtns(mobPhase,'setMobPhase')}</div>
+      <div style="background:color-mix(in srgb,${PHASE_COLORS[mobPhase]} 10%,transparent);border:1px solid color-mix(in srgb,${PHASE_COLORS[mobPhase]} 30%,transparent);border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:${PHASE_COLORS[mobPhase]};letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">${p.label} · ${p.dur}</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">${p.note}</div>
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Every Morning on Waking</div>
+      ${cards}
+      <div style="background:#0f1a10;border:1px solid #1a3a22;border-radius:6px;padding:13px 14px;margin-top:12px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.14em;color:#4ca868;text-transform:uppercase;margin-bottom:5px;">Compound Effect</div>
+        <div style="font-size:12px;color:#a0c8a8;line-height:1.6;">This routine done every morning for 16 weeks = 112 sessions. By Phase 2 your squat depth will feel unrecognisable. By Phase 3 this is maintenance — the gains are locked in.</div>
+      </div>`;
+  }
+
+  if (mobTab === 'dedicated') {
+    const sessions = data.mobilityDedicated;
+    const s = sessions[mobPhase];
+    const sectionCards = s.sections.map(sec=>`
+      <div style="margin-bottom:16px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${sec.color};margin-bottom:8px;padding-left:2px;">${sec.title}</div>
+        ${sec.exs.map(e=>`
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:6px;">
+            <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:4px;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">${e.n}</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:${sec.color};flex-shrink:0;">${e.d}</div>
+            </div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.55;">${e.notes}</div>
+          </div>`).join('')}
+      </div>`).join('');
+    content = `
+      <div style="display:flex;gap:8px;margin-bottom:14px;">${phaseBtns(mobPhase,'setMobPhase')}</div>
+      <div style="background:color-mix(in srgb,${PHASE_COLORS[mobPhase]} 10%,transparent);border:1px solid color-mix(in srgb,${PHASE_COLORS[mobPhase]} 30%,transparent);border-radius:6px;padding:12px 14px;margin-bottom:16px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:${PHASE_COLORS[mobPhase]};letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">${s.label} · ${s.dur}</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">${s.note}</div>
+      </div>
+      ${sectionCards}`;
+  }
+
+  if (mobTab === 'posture') {
+    const p = data.mobilityPosture;
+    content = `
+      <div style="background:#0f1a10;border:1px solid #1a3a22;border-radius:6px;padding:13px 14px;margin-bottom:14px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.14em;color:#4ca868;text-transform:uppercase;margin-bottom:5px;">Root Cause</div>
+        <div style="font-size:12px;color:#a0c8a8;line-height:1.6;">${p.cause}</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;padding:0 2px;">${p.note}</div>
+      ${p.exs.map(e=>`
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:13px 14px;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">${e.n}</div>
+            <div style="text-align:right;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--accent);">${e.sets}</div>
+              <div style="font-size:10px;color:var(--muted);">${e.hold}</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.55;">${e.notes}</div>
+        </div>`).join('')}`;
+  }
+
+  if (mobTab === 'core') {
+    const c = data.mobilityCore;
+    content = `
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;padding:0 2px;">${c.note}</div>
+      ${c.steps.map((s,i)=>`
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:13px 14px;margin-bottom:8px;display:flex;gap:12px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--accent);min-width:28px;line-height:1;">${i+1}</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">${s.n}</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6;">${s.detail}</div>
+          </div>
+        </div>`).join('')}
+      <div style="background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:6px;padding:13px 14px;margin-top:4px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">${c.drill.n} · ${c.drill.sets}</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">${c.drill.detail}</div>
+      </div>`;
+  }
+
+  document.getElementById('tab-mobility').innerHTML = `
+    <div style="padding:16px 0 12px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Mobility</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Progressive · Posture · Core · Daily + 2× Weekly</div>
+      <div style="display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;">${subBtns}</div>
+    </div>
+    ${content}
+    <div style="height:8px;"></div>
+  `;
+}
+
+function setMobPhase(i) { mobPhase = i; renderMobility(); }
+
+// ── CALENDAR (Static Template) ──────────────────────────────────────────────
+
+function renderCalendar() {
+  var weekDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var weekLabels = ['Lower A','Upper A','Rest','Lower B','Upper B','Mobility','Rest'];
+  var weekTypes  = ['gym','gym','rest','gym','gym','mob','rest'];
+  var weekColors = ['#e8c547','#e87c47','#3a3530','#e8c547','#e87c47','#4ca868','#3a3530'];
+
+  var phases = [
+    {name:'Phase 1', label:'Foundation & Movement', weeks:'Weeks 1–4',  color:'#e8c547', deload:4,  wStart:1,  wEnd:4,  focus:'Rack pulls, goblet squats, hip thrusts. Building the movement patterns.'},
+    {name:'Phase 2', label:'Load & Build',           weeks:'Weeks 5–10', color:'#e87c47', deload:8,  wStart:5,  wEnd:10, focus:'Conventional deadlift and back squat introduced. 5x5 on main lifts.'},
+    {name:'Phase 3', label:'Strength & Mass',        weeks:'Weeks 11–16',color:'#e84747', deload:16, wStart:11, wEnd:16, focus:'Wave loading, heavy singles, rack pull overload. Peak strength.'},
+  ];
+
+  function dayBadge(i, isDeload) {
+    var t = weekTypes[i], c = weekColors[i], lbl = weekLabels[i].split(' ')[0];
+    var bg = t==='rest' ? 'rgba(255,255,255,0.03)' : t==='gym' ? 'rgba(232,197,71,0.1)' : 'rgba(76,168,104,0.1)';
+    if (t==='gym' && c==='#e87c47') bg = 'rgba(232,124,71,0.1)';
+    var border = t==='rest' ? '#2e2720' : (t==='gym' ? 'rgba(232,197,71,0.25)' : 'rgba(76,168,104,0.25)');
+    if (t==='gym' && c==='#e87c47') border = 'rgba(232,124,71,0.25)';
+    var textColor = t==='rest' ? '#3a3530' : c;
+    if (isDeload && t!=='rest') { bg='rgba(122,154,122,0.1)'; border='rgba(122,154,122,0.25)'; textColor='#7a9a7a'; lbl=lbl; }
+    return '<div style="text-align:center;padding:6px 2px;border-radius:5px;background:'+bg+';border:1px solid '+border+';">'
+      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:9px;font-weight:700;color:#7a6f62;letter-spacing:0.06em;">'+weekDays[i]+'</div>'
+      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:8px;font-weight:700;color:'+textColor+';margin-top:2px;line-height:1.2;">'+lbl+'</div>'
+      +'</div>';
+  }
+
+  function weekRow(wNum, phaseColor, isDeload) {
+    var badges = '';
+    for (var i=0; i<7; i++) badges += dayBadge(i, isDeload);
+    var wLabel = isDeload
+      ? '<span style="color:#7a9a7a;">WK '+wNum+' <span style="font-size:9px;">DELOAD</span></span>'
+      : '<span style="color:'+phaseColor+';">WK '+wNum+'</span>';
+    return '<div style="margin-bottom:8px;">'
+      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;font-weight:700;margin-bottom:4px;">'+wLabel+'</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">'+badges+'</div>'
+      +'</div>';
+  }
+
+  var phaseHTML = '';
+  for (var pi=0; pi<phases.length; pi++) {
+    var p = phases[pi];
+    var rows = '';
+    for (var w=p.wStart; w<=p.wEnd; w++) rows += weekRow(w, p.color, w===p.deload);
+    phaseHTML += '<div style="margin-bottom:22px;">'
+      +'<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-left:3px solid '+p.color+';border-radius:0 8px 8px 0;padding:13px 16px;margin-bottom:12px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:15px;font-weight:800;text-transform:uppercase;color:'+p.color+';">'+p.name+': '+p.label+'</div>'
+      +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:10px;color:'+p.color+';opacity:0.8;">'+p.weeks+'</div>'
+      +'</div>'
+      +'<div style="font-size:12px;color:#7a6f62;line-height:1.6;">'+p.focus+'</div>'
+      +'</div>'
+      +rows
+      +'</div>';
+  }
+
+  var legend = '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">'
+    +[['#e8c547','Lower Day'],['#e87c47','Upper Day'],['#4ca868','Mobility'],['#3a3530','Rest']].map(function(x){
+      return '<div style="display:flex;align-items:center;gap:5px;">'
+        +'<div style="width:9px;height:9px;border-radius:2px;background:'+x[0]+';opacity:0.9;"></div>'
+        +'<span style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;color:#7a6f62;">'+x[1]+'</span>'
+        +'</div>';
+    }).join('')+'</div>';
+
+  var missedNote = '<div style="background:rgba(232,197,71,0.07);border:1px solid rgba(232,197,71,0.2);border-radius:6px;padding:14px 16px;margin-bottom:18px;">'
+    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;font-weight:700;color:#e8c547;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">If You Miss a Session</div>'
+    +'<div style="font-size:13px;color:#7a6f62;line-height:1.75;">'
+    +'Slide everything forward by one day — the order never changes.<br>'
+    +'<strong style="color:#ede5d8;">Miss Monday Lower A?</strong> Do it Tuesday, push Upper A to Wednesday.<br>'
+    +'<strong style="color:#ede5d8;">Miss a full week?</strong> Pick up exactly where you left off. Never skip ahead.<br>'
+    +'<strong style="color:#ede5d8;">Deload week?</strong> Still do it — it\'s recovery, not optional.'
+    +'</div></div>';
+
+  document.getElementById('tab-calendar').innerHTML =
+    '<div style="padding:16px 0 12px;">'
+    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">16-Week Schedule</div>'
+    +'<div style="font-size:13px;color:#7a6f62;margin-bottom:14px;">Your full programme at a glance. Missed sessions slide forward.</div>'
+    +'</div>'
+    +missedNote
+    +legend
+    +phaseHTML
+    +'<div style="height:8px;"></div>';
+}
+
+
+function renderSafety() {
+  const cards = data.safety.map((r,i)=>`
+    <div class="safety-card">
+      <div class="safety-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="safety-text">${r}</div>
+    </div>`).join('');
+
+  document.getElementById('tab-safety').innerHTML = `
+    <div class="sec-heading">Safety Rules</div>
+    <div class="sec-sub">Heavy lifting rewards those who stay consistent. Injury breaks consistency. These are non-negotiable.</div>
+    ${cards}
+    <div style="height:8px;"></div>
+  `;
+}
+
+let nutTab = 'schedule';
+
+function renderNutrition() {
+  var subTabs = [
+    {id:'schedule',label:'Day Plan'},
+    {id:'breakfast',label:'Breakfast'},
+    {id:'lunch',label:'Lunch'},
+    {id:'dinner',label:'Dinner'},
+    {id:'snacks',label:'Snacks'},
+    {id:'macros',label:'Macros'},
+    {id:'shopping',label:'Shopping'},
+  ];
+
+  var subBtns = subTabs.map(function(t) {
+    var active = nutTab === t.id;
+    return '<button onclick="nutTab=\''+t.id+'\';renderNutrition();" style="'
+      +'flex-shrink:0;padding:8px 14px;border-radius:20px;'
+      +'border:1px solid '+(active?'var(--accent)':'var(--border)')+';'
+      +'background:'+(active?'rgba(232,197,71,0.15)':'var(--card)')+';'
+      +'color:'+(active?'var(--accent)':'var(--muted)')+';'
+      +'font-family:\'Barlow Condensed\',sans-serif;font-size:12px;font-weight:700;'
+      +'letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;">'
+      +t.label+'</button>';
+  }).join('');
+
+  var content = '';
+
+  if (nutTab === 'schedule') {
+    content = '<div style="margin-bottom:14px;"><div style="font-size:13px;color:var(--muted);line-height:1.6;">Training days: gym at 7am. Here\'s how to structure eating around it.</div></div>'
+      + data.trainingDaySchedule.map(function(s) {
+        return '<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;gap:14px;align-items:flex-start;">'
+          +'<div style="text-align:center;min-width:52px;flex-shrink:0;">'
+          +'<div style="font-size:18px;margin-bottom:2px;">'+s.emoji+'</div>'
+          +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;font-weight:700;color:var(--accent);">'+s.time+'</div>'
+          +'</div>'
+          +'<div style="flex:1;">'
+          +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">'+s.label+'</div>'
+          +'<div style="font-size:12px;color:var(--muted);line-height:1.55;">'+s.desc+'</div>'
+          +(s.kcal?'<div style="font-size:11px;color:var(--accent);margin-top:4px;font-family:\'Barlow Condensed\',sans-serif;">'+s.kcal+'</div>':'')
+          +'</div></div>';
+      }).join('');
+  }
+
+  function mealCards(arr) {
+    return arr.map(function(m) {
+      return '<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:10px;">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;flex-wrap:wrap;">'
+        +'<div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">'+m.name+'</div>'
+        +'<div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:0.06em;">'+m.tag+'</div></div>'
+        +'<div style="text-align:right;flex-shrink:0;">'
+        +'<div style="font-size:11px;color:var(--accent);font-family:\'Barlow Condensed\',sans-serif;font-weight:700;">'+m.kcal+'</div>'
+        +'<div style="font-size:10px;color:var(--muted);margin-top:1px;">'+m.office+(m.time?' · '+m.time:'')+'</div>'
+        +'</div></div>'
+        +'<ul style="margin:8px 0;padding-left:16px;">'+m.items.map(function(i){return '<li style="font-size:12px;color:var(--text);opacity:0.8;line-height:1.7;">'+i+'</li>';}).join('')+'</ul>'
+        +'<div style="background:rgba(232,197,71,0.08);border-left:2px solid var(--accent);padding:8px 10px;border-radius:0 4px 4px 0;margin-top:8px;">'
+        +'<div style="font-size:11px;color:var(--muted);font-style:italic;line-height:1.55;">💡 '+m.tip+'</div></div>'
+        +'</div>';
+    }).join('');
+  }
+
+  if (nutTab === 'breakfast') content = mealCards(data.breakfasts);
+  if (nutTab === 'lunch')     content = mealCards(data.lunches);
+  if (nutTab === 'dinner')    content = mealCards(data.dinners);
+
+  if (nutTab === 'snacks') {
+    content = data.snacks.map(function(block) {
+      return '<div style="margin-bottom:20px;">'
+        +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">'+block.time+'</div>'
+        +block.items.map(function(s){
+          return '<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:7px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">'
+            +'<div style="flex:1;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;">'+s.n+'</div>'
+            +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+s.easy+'</div></div>'
+            +'<div style="font-size:11px;color:var(--accent);font-family:\'Barlow Condensed\',sans-serif;font-weight:700;text-align:right;flex-shrink:0;">'+s.k+'</div>'
+            +'</div>';
+        }).join('')+'</div>';
+    }).join('');
+  }
+
+  if (nutTab === 'macros') {
+    content = '<div style="margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.6;">The framework everything else is built around.</div>'
+      +data.nutrition.map(function(n){
+        return '<div class="info-card"><div class="info-card-label">'+n.label+'</div><div class="info-card-val">'+n.val+'</div><div class="info-card-detail">'+n.detail+'</div></div>';
+      }).join('');
+  }
+
+  if (nutTab === 'shopping') {
+    content = '<div style="margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.6;">Weekly shop covering all meals in this plan.</div>'
+      +data.shopping.map(function(cat){
+        return '<div style="margin-bottom:16px;">'
+          +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">'+cat.emoji+' '+cat.cat+'</div>'
+          +cat.items.map(function(item){
+            return '<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:5px;margin-bottom:5px;">'
+              +'<div style="width:16px;height:16px;border:1.5px solid var(--border);border-radius:3px;flex-shrink:0;margin-top:1px;"></div>'
+              +'<div style="font-size:13px;color:var(--text);opacity:0.85;line-height:1.5;">'+item+'</div></div>';
+          }).join('')+'</div>';
+      }).join('');
+  }
+
+  document.getElementById('tab-nutrition').innerHTML =
+    '<div style="padding:16px 0 12px;">'
+    +'<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Nutrition</div>'
+    +'<div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Office-friendly · No fish · 7am gym start</div>'
+    +'<div style="display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;">'+subBtns+'</div>'
+    +'</div>'
+    +content
+    +'<div style="height:8px;"></div>';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+renderPlan();
+renderMobility();
+renderNutrition();
+renderCalendar();
+renderSafety();
+</script>
+</body>
+</html>

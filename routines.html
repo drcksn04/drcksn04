@@ -376,14 +376,7 @@ function defaultCategories() {
         'Updated 2 Nov',
         '',
         'Optional',
-        '* The Ordinary NMF + HA before the gel cream on dry/tight days',
-        '',
-        'Rules of thumb',
-        '* Patch test anything new (inner forearm or small patch of jaw, 24h)',
-        '* Take baseline photos now, then weekly; judge at 4 weeks',
-        '',
-        'Not needed (covered)',
-        '* Horace Mattifying, Cetaphil, LRP Hydraphase: Iunik replaces all three'
+        '* The Ordinary NMF + HA before the gel cream on dry/tight days'
       ].join('\n') },
     { id: 'lifestyle', name: 'Lifestyle & health', emoji: '🏃', color: 'lavender', part: 'day', cadence: C.daily, rollover: true, notes: '' },
     { id: 'groceries', name: 'Shopping & groceries', emoji: '🛒', color: 'green', part: 'day', cadence: C.weekly(6), rollover: true, notes: '' },
@@ -398,10 +391,6 @@ function defaultCategories() {
         '* Wed: Horace Vitamin C + Glycolic',
         '* Tue / Thu / Sat / Sun: no actives',
         '* CeraVe SA Cleanser: not in rotation for now (revisit after 4+ weeks if skin is calm)',
-        '',
-        'Beard',
-        '* Beard oil (Cliganic jojoba) on Tue / Thu / Sat only, 2-3 drops into the hair, after moisturiser',
-        '* Comb with the afro comb to spread the oil (gentle, hair only, don\'t drag over bumps)',
         '',
         'Rules of thumb',
         '* Never stack two acids in the same 24h',
@@ -419,27 +408,23 @@ function defaultCategories() {
   ];
 }
 
-/* Skincare routine (updated 2 Nov). Skincare doesn't carry over: a missed acid
-   pushed to the next day could stack with the next acid. */
+/* Skincare routine (updated 2 Nov), as written — nothing added. Skincare doesn't
+   carry over: a missed acid pushed to the next day could stack with the next acid. */
 function skincareSeed() {
-  const ACID = 'Active: on bare skin, before hydrating serums. Keep on the skin, not worked into dense beard hair.';
   return [
     { category: 'am-skin', emoji: '🫧', title: 'Anua Heartleaf Foam', notes: 'In the shower (rinse only if skin feels tight)' },
     { category: 'am-skin', emoji: '💧', title: 'Horace HA + Panthenol Serum', notes: 'On damp skin' },
-    { category: 'am-skin', emoji: '🌿', title: 'Iunik Centella Gel Cream', notes: 'Optional: The Ordinary NMF + HA before this on dry/tight days' },
+    { category: 'am-skin', emoji: '🌿', title: 'Iunik Centella Gel Cream', notes: 'Optional: The Ordinary NMF + HA before the gel cream on dry/tight days' },
     { category: 'am-skin', emoji: '☀️', title: 'LRP Anthelios UVmune 400 SPF', notes: '' },
-    { category: 'am-skin', emoji: '📸', title: 'Skin progress photo', cadence: C.weekly(1), rollover: true, notes: 'Same light, same angles each week. Judge at 4 weeks.' },
-    { category: 'am-skin', emoji: '🔎', title: '4-week skin check-in', cadence: { type: 'once', date: addDays(todayStr(), 28) }, rollover: true,
-      notes: 'Compare photos to the baseline.\nRevisit CeraVe SA Cleanser if skin is calm.\nBeard bumps not improving after 4-6 weeks = see a GP or pharmacist.' },
 
     { category: 'pm-skin', emoji: '🫗', title: 'Haruharu Black Rice Oil Cleanser', notes: 'First cleanse, on dry skin' },
     { category: 'pm-skin', emoji: '🫧', title: 'Anua Heartleaf Foam', notes: 'Second cleanse' },
-    { category: 'pm-skin', emoji: '🧪', title: 'Horace Salicylic + Niacinamide', cadence: C.weekly(1, 5), notes: ACID },
-    { category: 'pm-skin', emoji: '🍊', title: 'Horace Vitamin C + Glycolic', cadence: C.weekly(3), notes: ACID },
+    { category: 'pm-skin', emoji: '🧪', title: 'Horace Salicylic + Niacinamide', cadence: C.weekly(1, 5), notes: '' },
+    { category: 'pm-skin', emoji: '🍊', title: 'Horace Vitamin C + Glycolic', cadence: C.weekly(3), notes: '' },
     { category: 'pm-skin', emoji: '💧', title: 'Horace HA + Panthenol Serum', notes: '' },
     { category: 'pm-skin', emoji: '🌿', title: 'Iunik Centella Gel Cream', notes: '' },
     { category: 'pm-skin', emoji: '🧔', title: 'Beard oil (Cliganic jojoba)', cadence: C.weekly(2, 4, 6), notes: '2-3 drops into the hair, after moisturiser' },
-    { category: 'pm-skin', emoji: '🪮', title: 'Comb beard (afro comb)', cadence: C.weekly(2, 4, 6), notes: "Spread the oil. Gentle, hair only, don't drag over bumps." }
+    { category: 'pm-skin', emoji: '🪮', title: 'Comb the beard (afro comb)', cadence: C.weekly(2, 4, 6), notes: "To spread the oil (gentle, hair only, don't drag over bumps)" }
   ];
 }
 
@@ -523,7 +508,7 @@ const ui = { date: todayStr(), monthOpen: false, monthCursor: monthStart(todaySt
 let lastToday = todayStr();
 
 function blankState() {
-  return { version: 2, tasks: [], categories: [], done: {}, skips: {}, checks: {}, timers: {}, collapsed: {} };
+  return { version: 3, tasks: [], categories: [], done: {}, skips: {}, checks: {}, timers: {}, collapsed: {} };
 }
 
 function makeTask(src) {
@@ -570,9 +555,37 @@ function migrate(s) {
     }
     s.seededSkincare = true;
   }
-  s.version = 2;
+  if ((s.version || 0) < 3) removeUnrequestedAdditions(s);
+  s.version = 3;
   [...s.tasks].sort(byOrder).forEach((t, i) => { t.order = i; });
   return s;
+}
+
+/* v2 seeded a few things that weren't in the routine — remove them, but only
+   where they're still exactly as seeded (anything edited is left alone). */
+function removeUnrequestedAdditions(s) {
+  const added = {
+    'Skin progress photo': 'Same light, same angles each week. Judge at 4 weeks.',
+    '4-week skin check-in': 'Compare photos to the baseline.\nRevisit CeraVe SA Cleanser if skin is calm.\nBeard bumps not improving after 4-6 weeks = see a GP or pharmacist.'
+  };
+  s.tasks = s.tasks.filter(t => !(t.category === 'am-skin' && added[t.title] === t.notes));
+  const ACID = 'Active: on bare skin, before hydrating serums. Keep on the skin, not worked into dense beard hair.';
+  const fresh = defaultCategories();
+  for (const t of s.tasks) {
+    if (t.notes === ACID) t.notes = '';
+    if (t.notes === 'Optional: The Ordinary NMF + HA before this on dry/tight days') t.notes = 'Optional: The Ordinary NMF + HA before the gel cream on dry/tight days';
+    if (t.title === 'Comb beard (afro comb)' && t.notes === "Spread the oil. Gentle, hair only, don't drag over bumps.") {
+      t.title = 'Comb the beard (afro comb)';
+      t.notes = "To spread the oil (gentle, hair only, don't drag over bumps)";
+    }
+  }
+  for (const id of ['am-skin', 'pm-skin']) {
+    const c = s.categories.find(x => x.id === id);
+    const f = fresh.find(x => x.id === id);
+    if (!c || !f) continue;
+    if (id === 'am-skin' && c.notes.includes('* Take baseline photos now') && c.notes.includes('Not needed (covered)')) c.notes = f.notes;
+    if (id === 'pm-skin' && c.notes.includes('\nBeard\n* Beard oil')) c.notes = f.notes;
+  }
 }
 
 function load() {
